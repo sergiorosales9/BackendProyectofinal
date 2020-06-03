@@ -5,6 +5,7 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const morgan= require("morgan");
+const cors = require("cors")
 
 // imports de archivos propios
 const db = require("./config/dataBase");
@@ -25,6 +26,7 @@ passport.use('facebook', facebookStrategy)
 
 // setup express aplicaton
 const app = express();
+app.use(cors())
 app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());

@@ -34,12 +34,11 @@ const UserController = {
   },
 
   autenticarUsuario : (req , res , next) => {
-    console.log('antes del strategy local')
       passport.authenticate('local', {session:false} , (error,user, info) =>{
 
-        if (error) { return res.status(400).json({error}); }
+        if (error) return res.status(400).json({error}); 
 
-        if (!user) { return res.stauts(400).json({message : "user not found o password incorret"}) }
+        if (!user)  return res.status(400).json({message : "usuario o password incorretos"}) 
         
         const payload = {
           sub : user._id,
