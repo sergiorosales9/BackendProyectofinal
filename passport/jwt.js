@@ -11,7 +11,7 @@ const config = {
 }
 
 const jwtStrategy = new JwtStrategy(config, async (payload , done)=>{
-    const user = await UserModel.findById(payload.sub);
+    const user = await UserModel.findById(payload.sub).populate('carrito');
     if(!user) return done(null, false);
     return done(null, user)
 

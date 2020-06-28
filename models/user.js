@@ -32,6 +32,14 @@ const UserShema = mongoose.Schema({
     type: String,
     trim: true,
   },
+  carrito:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Carrito'
+  },
+  turno:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Turno'
+  }]
 
 });
 UserShema.plugin(findOrCreate) ;

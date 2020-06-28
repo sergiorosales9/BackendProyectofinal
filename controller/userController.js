@@ -48,7 +48,8 @@ const UserController = {
       const token =  jwt.sign(payload, process.env.SECRETA, {algorithm: process.env.ALGORITMO})
         res.json({token});
       })(req, res , next) 
-  }
+  },
+  
 
  
 
