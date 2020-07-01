@@ -3,9 +3,9 @@ const router = require('express').Router();
 const carritoController = require("../controller/carritoController")
 
 router.route("/")
-        .get(carritoController.mostrarCarrito)
         .post(carritoController.cargarProductoCarrito);
-router.route("/")
+router.route("/:id")
+        .get(carritoController.mostrarCarrito)
         .put(carritoController.editarCarrito) 
         .delete(carritoController.eliminarProductoCarrito);       
         

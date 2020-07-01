@@ -6,16 +6,21 @@ const CarritoShema = mongoose.Schema({
     required: true,
     ref: "User",
   },
-  Productos: [
+  productos: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Producto",
+      productoId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Producto",
+      },
+      cantidadProducto: {
+        type: Number,
+      },
     },
   ],
   descuento: {
     type: String,
     trim: true,
-  }
+  },
 });
 const Carrito = mongoose.model("Carrito", CarritoShema);
 module.exports = Carrito;
