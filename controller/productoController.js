@@ -38,11 +38,27 @@ modificarProducto: async (req , res) => {
        return res.json({message:"producto actualizado"})
    }else{
        return res.json({message:"producto no encontrado"})
-   }
-    
-
-        
+   }    
 },
+
+
+// actualiza el stock de los productos una vez realizada la compra
+actualizarStock : async( req, res, next) => {
+   const ProductosComprados=req.productos;
+   //tengo que iterar sobre los productos comprados
+ProductosComprados.map(async(produco)=>{
+    //cambio la cantidad a negativo
+    const cantidad= (-1)*produco.cantidad;
+    //actualizo los productos
+    const productoActualizado= await ProductoModel.updateOne(
+        {_id:produco._id}, 
+        { $inc: { stock: cantidad, } }
+        )
+
+
+})
+next()
+}
 
 }
 

@@ -8,7 +8,7 @@ const ProductoShema = mongoose.Schema({
         lowercase: true
       },
       stock: {
-        type: String,
+        type: Number,
         trim: true,
       },
       imagen: [{

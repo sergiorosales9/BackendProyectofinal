@@ -4,9 +4,8 @@ const carritoController = require("../controller/carritoController")
 
 router.route("/")
         .post(carritoController.cargarProductoCarrito);
-router.route("/:id")
+router.route("/:_id")
         .get(carritoController.mostrarCarrito)
-        .put(carritoController.editarCarrito) 
         .delete(carritoController.eliminarProductoCarrito);       
         
 

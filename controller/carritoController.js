@@ -1,18 +1,22 @@
 const CarritoModel = require("../models/carrito");
 const UserModel = require("../models/user");
 const ProductoModel = require('../models/producto');
-const { create } = require("../models/carrito");
+const Carrito = require("../models/carrito");
+
 
 
 
 const carritoController ={
+    //muestra el carrito del usuario
+
     mostrarCarrito: async (req , res) => {
-        const { id } = req.params;
+        const { _id } = req.params;
       
-    const carrito = await CarritoModel.find({usuario:id}).populate("productos.productoId");
+    const carrito = await CarritoModel.find({usuario:_id}).populate("productos.productoId");
     return res.json({carrito})
     
 },
+// carga un producto al carrito
 
 cargarProductoCarrito: async (req , res) => {
 
@@ -38,7 +42,7 @@ cargarProductoCarrito: async (req , res) => {
             if(cantidad>0){
                 //aumentar la cantidad el numero de su constante
                 const _idProduc=producto._id
-             const newCarrito = await CarritoModel.findOneAndUpdate({_id:ExisteCarrito[0]._id ,"productos._id": _idProduc}, {$inc:{"productos.$.cantidadProducto":cantidad}})
+             const newCarrito = await CarritoModel.findOneAndUpdate({_id:ExisteCarrito[0]._id ,"productos._id": _idProduc}, {"productos.$.cantidadProducto":cantidad})
              res.status(200).json({newCarrito})
              return 
             }
@@ -76,39 +80,36 @@ cargarProductoCarrito: async (req , res) => {
 },
 
 
-
-editarCarrito: async (req , res) => {
-
-    const {nombre ,imagenNueva, descripcion ,stock,_id,precio,tipo} = req.body;
- 
-    const producto = await ProductoModel.findByIdAndUpdate(_id, {nombre,
-        $push: {imagen:imagenNueva} ,
-               descripcion,stock, precio,tipo})
-
-    console.log(producto)
-   if(producto){
-       return res.json({message:"producto actualizado"})
-   }else{
-       return res.json({message:"producto no encontrado"})
-   }
-    
-
-        
-},
+//elimina un producto del carrito 
 
 eliminarProductoCarrito: async (req , res) => {
+    const {_id} = req.params;
+    const {usuarioId} = req.body;
+    const  productoId = _id
 
-    const {_id, productoId} = req.body;
- //busco el carrito
- const carrito = await CarritoModel.findById({_id});
-   const productos= carrito.Productos;
+    console.log(req.body)
   
-   const newProductosCar = productos.filter(element => element != productoId)
-  
-   const newCarrito = await CarritoModel.findByIdAndUpdate({_id}, {Productos:newProductosCar})
-  
-        res.json({message:"Producto elminado"})
+    console.log(req.params)
+    //con el usuario busco el carrito
+
+    const carrito = await CarritoModel.findOneAndUpdate({usuario:usuarioId,"productos._id":productoId},{ $pull: { 'productos': { _id: productoId } }})
+        if (carrito) {
+         return   res.json({message:"Producto eliminado"})
+        }else{
+            return res.json({message:"error "})
+        }
+       
 },
+
+// actualiza el carrito a cero despues de la venta exitosa
+actualizarCarrito : async(req, res, next) => {
+    const {carrito} =req.body;
+   
+    const carritoUser = await CarritoModel.findOneAndUpdate({_id:carrito},{productos:[]})
+    // elminar los productos del carrito
+        next()
+    
+}
 }
 
 module.exports = carritoController;

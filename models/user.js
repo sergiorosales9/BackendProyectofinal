@@ -39,6 +39,10 @@ const UserShema = mongoose.Schema({
   turno:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:'Turno'
+  }],
+  venta:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Venta'
   }]
 
 });
