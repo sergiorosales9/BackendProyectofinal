@@ -6,7 +6,7 @@ const turnoController = {
      //MOSTRAR TODOS TURNOS 
   mostrarTurnos: async (req, res) => {
     
-    const turnos = await turnoModel.find();
+    const turnos = await turnoModel.find().populate("usuario");
 
     if (turnos[0] === undefined) {
       return res.json({ message: "No existen turnos" });
