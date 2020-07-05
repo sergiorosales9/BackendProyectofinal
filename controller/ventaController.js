@@ -18,10 +18,11 @@ const VentaController ={
 
     // traer las ventas de un usuario
     listarVentasUsuario: async (req , res) => {
-        const { _id } = req.params;
+        const { id } = req.params;
+        console.log(req.params);
         // populate("productos.productoId")
       //busco las ventas que tengan ese usuario
-    const ventas = await VentaModel.find({usuario:_id});
+    const ventas = await VentaModel.find({usuario:id});
     if (ventas) {
         return res.json(ventas)
     }
