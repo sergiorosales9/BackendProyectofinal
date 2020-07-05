@@ -25,14 +25,26 @@ const VentaController ={
     if (ventas) {
         return res.json(ventas)
     }
-    return res.sjon({message:"No tiene ventas realizadas"})
+    return res.json({message:"No tiene ventas realizadas"})
     
 },
+
+ // traer las ventas de un realizada
+ ventaRealizada: async (req , res) => {
+  
+    const { id } = req.params;
+    // populate("productos.productoId")
+  //busco las ventas que tengan ese usuario
+
+const venta = await VentaModel.findOne({_id:id})
+return res.json(venta)
+},
+
 
 
 //cargar una venta realizada por un usuario
 cargarVenta: async (req , res, next) => {
-    const { estado }= req.estado;
+    const  estado = req.estado;
    const {nombre,
     apellido,
     direccion_1,
@@ -75,7 +87,30 @@ cargarVenta: async (req , res, next) => {
         // lo guardo en el array del la listaproducto
         listaproductos.push(detalleProducto)
         })
-   
+   //veo el estado
+   if(estado==="rechazado"){
+    const newVenta = new VentaModel({
+        nombre,
+        apellido,
+        direccion_1,
+        postal,
+        pais,
+        prov,
+        telefono,
+        tipoEnvio,
+        tarjeta,
+        total ,
+        subtotal ,
+        productos:listaproductos,
+        usuario,
+        efectivo,
+        estadoVenta:estado
+    })
+
+    return res.json(newVenta) ;
+}
+
+
     //creo la venta en dos tipos efectio o credito
         if (efectivo) {
             //caso de pagar con efectivo
@@ -102,8 +137,8 @@ cargarVenta: async (req , res, next) => {
                 // la guardo en el array venta que tiene el usuario a la venta
                 const user= await UserModel.findOneAndUpdate({_id:usuario},{$push:{venta:newVenta._id}} )
                 res.json(newVenta) ;
-                req.productos=listaproductos;
-            
+                req.productos=listaProductosIds;
+                req.venta=newVenta;
                 next()
                 return
                
@@ -132,8 +167,9 @@ cargarVenta: async (req , res, next) => {
             newVenta.save()
             // la guardo en el array venta que tiene el usuario a la venta
             const user= await UserModel.findOneAndUpdate({_id:usuario},{$push:{venta:newVenta._id}} )
-            res.json(user) ;
+            res.json(newVenta) ;
             req.productos=listaProductosIds;
+            req.venta=newVenta;
                 next()
                 return
         }

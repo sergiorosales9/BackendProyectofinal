@@ -6,7 +6,7 @@ const CarritoController = require("../controller/carritoController");
 const EmailController = require("../controller/enviarEmail");
 const verificarStock = require('../middleware/verificarStockProducto');
 
-router.route("/:id")
+router.route("/:_id")
 // traer un las ventas de un usuario
         .get(VentaController.listarVentasUsuario)
 router.route("/") 

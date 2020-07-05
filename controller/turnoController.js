@@ -19,7 +19,7 @@ const turnoController = {
   mostrarTurnosId: async (req, res) => {
     const { _id } = req.params;
 
-    const turnos = await turnoModel.find({ usuario: _id });
+    const turnos = await turnoModel.find({ usuario: _id }).populate("usuario");
 
     if (turnos[0] === undefined) {
       return res.json({ message: "No tiene turnos" });
@@ -28,7 +28,7 @@ const turnoController = {
     }
   },
   //CARGAR TURNOS
-  cargarTurnos: async (req, res) => {
+  cargarTurnos: async (req, res, next) => {
     const {
       usuario,
       hora,
@@ -38,45 +38,25 @@ const turnoController = {
       estado,
       dispositivo,
       precio,
+      servicio
     } = req.body;
-    console.log(req.body);
-    const existeTurno = await turnoModel.find({ fecha, hora });
+   
+    const existeTurno = await turnoModel.find( { $and : [ {fecha:fecha} , {hora:hora} , {servicio:servicio}] });
     if (existeTurno[0] === undefined) {
-      const newTurno = new turnoModel({ usuario, fecha, hora });
+      const newTurno = new turnoModel({ usuario, fecha, hora,servicio, descripcion ,marca , estado, dispositivo, precio});
       newTurno.save();
-      return res.json({ newTurno });
+      //cargar en la persona 
+      const user = await UserModel.findOneAndUpdate({_id:usuario}, {$push : {turno:newTurno._id }})
+      res.json({ newTurno })
+      req.turno=newTurno
+      next()
+      return ;
     } else {
       return res.json({ message: "No esta disponible esta hora o fecha" });
     }
   },
-
-  editarCarrito: async (req, res) => {
-    const {
-      nombre,
-      imagenNueva,
-      descripcion,
-      stock,
-      _id,
-      precio,
-      tipo,
-    } = req.body;
-
-    const producto = await ProductoModel.findByIdAndUpdate(_id, {
-      nombre,
-      $push: { imagen: imagenNueva },
-      descripcion,
-      stock,
-      precio,
-      tipo,
-    });
-
-    console.log(producto);
-    if (producto) {
-      return res.json({ message: "producto actualizado" });
-    } else {
-      return res.json({ message: "producto no encontrado" });
-    }
-  },
+  
+ 
 
   //ELIMINAR TURNOS
   eliminarTurnos: async (req, res) => {
