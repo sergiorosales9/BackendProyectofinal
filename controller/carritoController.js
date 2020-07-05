@@ -104,8 +104,9 @@ eliminarProductoCarrito: async (req , res) => {
 // actualiza el carrito a cero despues de la venta exitosa
 actualizarCarrito : async(req, res, next) => {
     const {carrito} =req.body;
-   
+   console.log(carrito)
     const carritoUser = await CarritoModel.findOneAndUpdate({_id:carrito},{productos:[]})
+    console.log("ya actualize el carrito")
     // elminar los productos del carrito
         next()
     

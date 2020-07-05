@@ -15,32 +15,45 @@ cargarProducto: async (req , res) => {
    
     //Exite el producto?
     const productoExiste = await ProductoModel.find({nombre})
-    console.log(productoExiste)
+    
     if(productoExiste == null){
         return res.json({message:"el producto ya esta en la lista"});
     }
+       
+    
       newProducto.save()
-    return res.json({newProducto})
+      return res.json({message:"el producto fue cargado exitosamente"});
 
         
 },
 
 modificarProducto: async (req , res) => {
+    const {_id} = req.params;
+    const {nombre ,imagen , descripcion ,stock, precio, tipo} = req.body;
 
-    const {nombre ,imagenNueva, descripcion ,stock,_id,precio,tipo} = req.body;
- 
-    const producto = await ProductoModel.findByIdAndUpdate(_id, {nombre,
-        $push: {imagen:imagenNueva} ,
-               descripcion,stock, precio,tipo})
+    const producto = await ProductoModel.findOneAndUpdate({_id:_id},{nombre , imagen ,descripcion, stock, precio , tipo}
+       )
 
-    console.log(producto)
+    
    if(producto){
        return res.json({message:"producto actualizado"})
    }else{
        return res.json({message:"producto no encontrado"})
    }    
 },
+//elimiar un producto
+eliminarProducto: async (req , res) => {
+    const {_id} = req.params;
+   
+    const producto = await ProductoModel.findOneAndDelete({_id:_id})
 
+    
+   if(producto){
+       return res.json({message:"producto eliminado"})
+   }else{
+       return res.json({message:"producto no encontrado"})
+   }    
+},
 
 // actualiza el stock de los productos una vez realizada la compra
 actualizarStock : async( req, res, next) => {

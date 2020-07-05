@@ -39,6 +39,11 @@ const TurnoShema = mongoose.Schema({
 
     trim: true,
   },
+  servicio:{
+    type:String,
+    uppercase:true,
+    trim:true,
+  }
 });
 
 const Turno = mongoose.model("Turno", TurnoShema);

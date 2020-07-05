@@ -31,6 +31,8 @@ const UserController = {
     
     const response = await newUser.save();
     res.json(response)
+    req.usuario=newUser
+    next()
   },
 
   autenticarUsuario : (req , res , next) => {
@@ -43,7 +45,7 @@ const UserController = {
         const payload = {
           sub : user._id,
           role: user.role,
-          exp: Date.now() + 36000
+          exp:  3600000000
         }
       const token =  jwt.sign(payload, process.env.SECRETA, {algorithm: process.env.ALGORITMO})
         res.json({token});

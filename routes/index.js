@@ -10,7 +10,7 @@ const carritoRoute = require("./carrito");
 const turnoRoute = require("./turno");
 const amdinRoute = require("./admin")
 const ventaRoute = require("./venta")
-
+const pagoRouete = require("./pago")
 
 router.get("/", (req, res, next) => res.send("GESIONANDO USUARIOS"));
 
@@ -31,8 +31,10 @@ router.use('/auth/facebook/callback', AutenthicateFacebook , contentRoutes);
 
 router.use('/auth/facebook', passport.authenticate('facebook') );
 //? rutas de ventas de usuarios
-router.use("/venta", ventaRoute)
+router.use("/venta", ventaRoute);
 
+//?ruta de pago 
+router.use("/pago", pagoRouete)
 
 
 module.exports = router;
