@@ -11,11 +11,6 @@ router.route("/:_id")
         .get(VentaController.listarVentasUsuario)
 router.route("/") 
         .get(VentaController.listarVentas)       
-// cargar venta realizada por un usuario, 
-//verifico el pago con el VeficiarPago
-//creo la venta si es exitoso el pago
-//si la venta es exitosa actualizar carrito del usuario y el stock del usuario
-//Enviar email de confirmacion de venta 
         .post(
             verificarStock,
             VerificarPago,

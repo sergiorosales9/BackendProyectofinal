@@ -31,7 +31,7 @@ modificarProducto: async (req , res) => {
     const {_id} = req.params;
     const {nombre ,imagen , descripcion ,stock, precio, tipo} = req.body;
 
-    const producto = await ProductoModel.findOneAndUpdate({_id:_id},{nombre , imagen ,descripcion, stock, precio , tipo}
+    const producto = await ProductoModel.findOneAndUpdate({_id:_id},{nombre , imagen:[imagen] ,descripcion, stock, precio , tipo}
        )
 
     
@@ -58,6 +58,7 @@ eliminarProducto: async (req , res) => {
 // actualiza el stock de los productos una vez realizada la compra
 actualizarStock : async( req, res, next) => {
    const ProductosComprados=req.productos;
+   console.log(ProductosComprados)
    //tengo que iterar sobre los productos comprados
 ProductosComprados.map(async(produco)=>{
     //cambio la cantidad a negativo
@@ -68,8 +69,9 @@ ProductosComprados.map(async(produco)=>{
         { $inc: { stock: cantidad, } }
         )
 
-
+        console.log(productoActualizado)
 })
+
 next()
 }
 

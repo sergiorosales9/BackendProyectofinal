@@ -5,7 +5,7 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const morgan= require("morgan");
-const cors = require("cors")
+const cors = require("cors");
 
 // imports de archivos propios
 const db = require("./config/dataBase");
@@ -16,6 +16,14 @@ const facebookStrategy = require('./passport/facebook')
 
 // connect db 
 db.connection();
+
+
+const mercadopago = require ('mercadopago');
+// Setup MercadoPago
+mercadopago.configure({
+  access_token: process.env.MP_TOKEN
+});
+
 
 // setup passport 
 

@@ -37,4 +37,6 @@ router.use("/venta", ventaRoute);
 router.use("/pago", pagoRouete)
 
 
+
+
 module.exports = router;

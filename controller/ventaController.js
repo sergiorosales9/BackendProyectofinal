@@ -106,13 +106,13 @@ cargarVenta: async (req , res, next) => {
         efectivo,
         estadoVenta:estado
     })
-
+    console.log("pase por aquiiii 123")
     return res.json(newVenta) ;
 }
 
 
     //creo la venta en dos tipos efectio o credito
-        if (efectivo) {
+        if (efectivo && estado==="exitoso") {
             //caso de pagar con efectivo
 
             const newVenta = new VentaModel({
@@ -138,13 +138,14 @@ cargarVenta: async (req , res, next) => {
                 const user= await UserModel.findOneAndUpdate({_id:usuario},{$push:{venta:newVenta._id}} )
                 res.json(newVenta) ;
                 req.productos=listaProductosIds;
+                console.log("pase por aquiiii 12")
                 req.venta=newVenta;
                 next()
                 return
                
            
             
-        }else {
+        }else if (!efectivo && estado ==="exitoso") {
             // caso de pagar con tarjeta
             const newVenta = new VentaModel({
                 nombre,
@@ -169,10 +170,13 @@ cargarVenta: async (req , res, next) => {
             const user= await UserModel.findOneAndUpdate({_id:usuario},{$push:{venta:newVenta._id}} )
             res.json(newVenta) ;
             req.productos=listaProductosIds;
+            console.log("pase por aquiiii 2")
             req.venta=newVenta;
                 next()
                 return
         }
+            
+        
    
 },
 
