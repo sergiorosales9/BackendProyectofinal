@@ -6,7 +6,7 @@ const User = require("../models/user");
 const localStrategy = new LocalStrategy (async (username, password, done  ) => {
   console.log('estoy dentro del strategy local')
 
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username }).populate('carrito');
 
   if (!user) {
     return done(null, false, { message: "Incorrect username." });
